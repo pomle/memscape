@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"/></script>
+		<script src="http://threejs.org/build/three.min.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/controller/AudioFader.js"></script>
+		<script type="text/javascript" src="js/controller/AudioResolver.js"></script>
+		<script type="text/javascript" src="js/controller/InstagramUserImagePool.js"></script>
+		<script type="text/javascript" src="js/controller/Photographer.js"></script>
+		<script type="text/javascript" src="js/controller/TrackQueue.js"></script>
+		<script type="text/javascript" src="js/entity/ImageEntity.js"></script>
+		<script type="text/javascript" src="js/model/ImageModel.js"></script>
+		<script type="text/javascript" src="js/world/ImageStream.js"></script>
+		<script type="text/javascript" src="js/world/SongStream.js"></script>
+		<style>
+			body {
+				color: #ffffff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var momentus;
+			$(function() {
+				$('form').submit(function(e) {
+					e.preventDefault();
+					var lastFmUser = $(this).find('[name=lastFmUser]').val();
+					var instagramUser = $(this).find('[name=instagramUser]').val();
+					$(this).remove();
+					momentus = new AutonomousMoments(lastFmUser, instagramUser);
+				});
+			});
+		</script>
+		<form>
+			Last <input name="lastFmUser" value="pomle"><br />
+			Instagram <input name="instagramUser" value="pomle"><br />
+			<button>Start</button>
+		</form>
+	</body>
+</html>
