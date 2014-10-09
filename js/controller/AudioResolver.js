@@ -23,14 +23,12 @@ var AudioResolver = function()
 		});
 
 		xhr.done(function(response) {
-			var trackUrl;
 			if (response.tracks.items.length) {
-				trackUrl = response.tracks.items[0].preview_url;
+				track = response.tracks.items[0];
 			} else {
-				trackUrl = false;
-
+				track = false;
 			}
-			_self.audioUrls[trackQuery] = trackUrl;
+			_self.audioUrls[trackQuery] = track;
 			callback(_self.audioUrls[trackQuery]);
 		});
 	}

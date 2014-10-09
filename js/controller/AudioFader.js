@@ -12,10 +12,12 @@ var AudioFader = function(intermediate_audio_url)
 	}
 
 	_self.channels.intermediate.loop = true;
-	_self.channels.intermediate.oncanplay = function() {
+	var intermediateReady = function() {
 		readyToFade = true;
+		this.removeEventListener('canplay', intermediateReady);
 		console.log('AudioFader is ready to fade');
-	}
+	};
+	_self.channels.intermediate.addEventListener('canplay', intermediateReady);
 	_self.channels.intermediate.src = intermediate_audio_url;
 
 	_self.fadeTo = function(mixin_audio_url)
@@ -59,7 +61,7 @@ var AudioFader = function(intermediate_audio_url)
 		_self.channels.intermediate.play();
 
 		TweenLite.to(_self.channels.intermediate, 1, {
-			'volume': .8,
+			'volume': .9,
 		});
 
 		if (currentChannel) {

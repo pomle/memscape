@@ -63,7 +63,9 @@ var InstagramUserImagePool = function(INSTAGRAM_TOKEN, instagramUserName)
 				lastResponse = response;
 				for (i in response.data) {
 					item = response.data[i];
-					var imageEntity = new ImageEntity(_self.resolveUrl(item['images']['standard_resolution']['url']), new Date(item.created_time * 1000));
+					var textureUrl = item['videos'] ? item['videos']['low_resolution']['url'] : item['images']['standard_resolution']['url']
+					var imageEntity = new ImageEntity(_self.resolveUrl(textureUrl), new Date(item.created_time * 1000));
+					imageEntity.metadata = item;
 					_self.images.push(imageEntity);
 				}
 				var callback;
