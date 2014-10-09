@@ -1,7 +1,12 @@
-var ImageModel = function(image_url)
+var ImageModel = function(instagram_item)
 {
 	var _self = this;
 	_self.angularSpeed = .2;
+
+	var resolveUrl = function(instagram_cdn_url)
+	{
+		return '/instagram_image/' + instagram_cdn_url.split('//')[1];
+	}
 
 	var fadeIn = function() {
 		var duration = .5 + (3*Math.random());;
@@ -31,27 +36,32 @@ var ImageModel = function(image_url)
 		);
 	}
 
-	function endsWith(str, suffix) {
-		return str.indexOf(suffix, str.length - suffix.length) !== -1;
-	}
-
-	if (endsWith(image_url, 'mp4')) {
-		var video = document.createElement( 'video' );
-		video.loop = true;
-		video.volume = 0;
-		video.src = image_url;
-		video.play();
-		var texture	= new THREE.Texture(video);
-		texture.minFilter = THREE.NearestFilter;
-		texture.magFilter = THREE.NearestFilter;
-		_self.material = new THREE.MeshBasicMaterial({
-			map: texture,
-			side: THREE.FrontSide,
-			opacity: 0,
-			transparent: true
-		});
-		var videoIsReady = false;
+	if (instagram_item['videos']) {
+		try {
+			var video_url = resolveUrl(instagram_item['videos']['low_resolution']['url']);
+			var video = document.createElement('video');
+			video.loop = true;
+			video.volume = 0;
+			video.src = video_url;
+			video.play();
+			var texture	= new THREE.Texture(video);
+			texture.minFilter = THREE.NearestFilter;
+			texture.magFilter = THREE.NearestFilter;
+			_self.material = new THREE.MeshBasicMaterial({
+				map: texture,
+				side: THREE.FrontSide,
+				opacity: 0,
+				transparent: true
+			});
+			var videoIsReady = false;
+		} catch (error) {
+			_self.material = new THREE.MeshBasicMaterial({
+				wireframe: true,
+				color: 'white'
+			});
+		}
 	} else {
+		var image_url = resolveUrl(instagram_item['images']['standard_resolution']['url']);
 		_self.material = new THREE.MeshLambertMaterial({
 			map: THREE.ImageUtils.loadTexture(image_url, null, fadeIn),
 			side: THREE.FrontSide,

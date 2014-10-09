@@ -76,6 +76,7 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 	var detailsFadeInTimer;
 	var detailsFadeInDelay = 1;
 	var detailsFadeInSpeed = 1;
+	var maxVisibleImages = 10;
 
 	function focusOnActiveImage()
 	{
@@ -90,15 +91,22 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 		timeline.addDate(imageEntity.date);
 
 		var dateString = imageEntity.date.toLocaleDateString();
-		var detailsString = imageEntity.metadata.filter;
+		var detailsString = '';
+		if (imageEntity.metadata.location && imageEntity.metadata.location.name) {
+			detailsString += imageEntity.metadata.location.name;
+		}
+		detailsString += ' (' + imageEntity.metadata.filter + ')';
 
+		clearTimeout(detailsFadeInTimer);
 		if (dateElement.text() != dateString || detailsElement.text() != detailsString) {
-			clearTimeout(detailsFadeInTimer);
-			informationElement.fadeOut(300, function() {
-				dateElement.html(dateString);
-				detailsElement.html(detailsString);
-				detailsFadeInTimer = setTimeout(function() { informationElement.fadeIn(detailsFadeInSpeed*1000); }, detailsFadeInDelay*1000);
-			});
+			setTimeout(function() {
+				informationElement.fadeOut(detailsFadeOutSpeed*1000, function() {
+					clearTimeout(detailsFadeInTimer);
+					dateElement.html(dateString);
+					detailsElement.html(detailsString);
+					detailsFadeInTimer = setTimeout(function() { informationElement.fadeIn(detailsFadeInSpeed*1000); }, Math.max(detailsFadeInDelay*1000, 500));
+				})
+			}, detailsFadeOutDelay*1000);
 		}
 
 		switch (viewMode) {
@@ -137,22 +145,31 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 		});
 	}
 
+	var viewModes = [1,2,3];
+	var viewModeIndex = 0;
+	_self.cycleViewMode = function()
+	{
+		viewModeIndex = ++viewModeIndex % viewModes.length;
+		_self.setViewMode(viewModes[viewModeIndex]);
+	}
+
 	_self.setViewMode = function(type)
 	{
 		if (viewMode != type) {
+			photographer.duration = _self.navigateCameraDuration;
 			switch (type) {
 				case 1:
-					TweenLite.to(photographer.camera.rotation, photographer.duration, {'y': -.14});
+					TweenLite.to(photographer.camera.rotation, _self.navigateCameraDuration, {'y': -.15});
 				break;
 				default:
-					TweenLite.to(photographer.camera.rotation, photographer.duration, {'y': 0});
+					TweenLite.to(photographer.camera.rotation, _self.navigateCameraDuration, {'y': 0});
 				break;
 			}
+			viewMode = type;
+			focusOnActiveImage(viewModes[viewModeIndex]);
 		}
-		viewMode = type;
-		focusOnActiveImage();
 	}
-	_self.setViewMode(1);
+	_self.setViewMode(viewModes[viewModeIndex]);
 
 	addImages();
 
@@ -160,6 +177,7 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 	_self.autoAdvanceImageExposure = 5;
 	_self.autoAdvanceCameraDuration = 5;
 	_self.navigateCameraDuration = .8;
+	_self.swipeAdvanceCameraDuration = .5;
 
 	var skipImage = function(steps)
 	{
@@ -201,8 +219,10 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 	var autoAdvanceTimer;
 	var autoAdvance = function()
 	{
-		detailsFadeInDelay = 1;
-		detailsFadeInSpeed = 2;
+		detailsFadeInDelay = 0;
+		detailsFadeOutDelay = .8;
+		detailsFadeInSpeed = 1.5;
+		detailsFadeOutSpeed = .5;
 		photographer.duration = _self.autoAdvanceCameraDuration;
 		photographer.easing = Power2.easeInOut;
 		skipImage(1);
@@ -247,21 +267,45 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 				clearTimeout(autoAdvanceTimer);
 				autoAdvanceTimer = setTimeout(autoAdvance, _self.autoAdvanceIdleTimeout*1000);
 				detailsFadeInDelay = 0;
-				detailsFadeInSpeed = .8;
+				detailsFadeOutDelay = 0;
+				detailsFadeInSpeed = .3;
+				detailsFadeOutSpeed = .1;
 				photographer.duration = _self.navigateCameraDuration;
 				photographer.easing = Power1.easeOut;
 				skipKeyMap[e.which]();
-			} else {
-				console.log(e.which);
-				switch (e.which) {
-					case 70:
-						trackQueue.playNext();
-					break;
-				}
+				return;
 			}
-		}).on('resize.momentus', function() {
+
+			switch (e.which) {
+				case 67: // c
+					_self.cycleViewMode();
+					return;
+				break;
+				case 70: // f
+					trackQueue.playNext();
+					return;
+				break;
+			}
+			console.log('Unassigned key', e.which);
+		})
+		.on('resize.momentus', function() {
 			renderer.setSize(window.innerWidth, window.innerHeight);
 			camera.aspect = window.innerWidth / window.innerHeight;
 			camera.updateProjectionMatrix();
+		});
+
+	var startX;
+	hudElement
+		.on('touchstart', function(e) {
+			startX = e.originalEvent.changedTouches[0].pageX;
+		})
+		.on('touchmove', function(e) {
+			var diffX = e.originalEvent.changedTouches[0].pageX - startX;
+			if (Math.abs(diffX) > 40) {
+				photographer.duration = _self.swipeAdvanceCameraDuration;
+				photographer.easing = Power1.easeOut;
+				skipImage(diffX < 0 ? 1 : -1);
+				startX = e.originalEvent.changedTouches[0].pageX;
+			}
 		});
 }

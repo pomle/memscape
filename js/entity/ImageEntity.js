@@ -1,5 +1,5 @@
-var ImageEntity = function(image_url, date)
+var ImageEntity = function(imageModel, date)
 {
-	this.ImageModel = new ImageModel(image_url);
+	this.ImageModel = imageModel;
 	this.date = date;
 }

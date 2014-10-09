@@ -27,14 +27,6 @@ var InstagramUserImagePool = function(INSTAGRAM_TOKEN, instagramUserName)
 		}
 	});
 
-	this.resolveUrl = function(instagram_image_url)
-	{
-		/*var a = document.createElement('a');
-		a.href = instagram_image_url;
-		var parts = instagram_image_url.split(a.hostname);*/
-		return '/instagram_image/' + instagram_image_url.split('//')[1];
-	}
-
 	_self.populateMore = function(callback)
 	{
 		if (!instagramUserId) {
@@ -63,8 +55,8 @@ var InstagramUserImagePool = function(INSTAGRAM_TOKEN, instagramUserName)
 				lastResponse = response;
 				for (i in response.data) {
 					item = response.data[i];
-					var textureUrl = item['videos'] ? item['videos']['low_resolution']['url'] : item['images']['standard_resolution']['url']
-					var imageEntity = new ImageEntity(_self.resolveUrl(textureUrl), new Date(item.created_time * 1000));
+					var imageModel = new ImageModel(item);
+					var imageEntity = new ImageEntity(imageModel, new Date(item.created_time * 1000));
 					imageEntity.metadata = item;
 					_self.images.push(imageEntity);
 				}

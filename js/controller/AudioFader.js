@@ -7,7 +7,7 @@ var AudioFader = function(intermediate_audio_url)
 
 	_self.fadeOutDuration = 2;
 	_self.channels = {
-		'intermediate': new Audio(),
+		'intermediate': document.createElement('video'),
 		'current': null
 	}
 
@@ -53,7 +53,7 @@ var AudioFader = function(intermediate_audio_url)
 		}
 
 		var mixin_timeout = setTimeout(doMix, minDelay);
-		var mixin = new Audio();
+		var mixin = document.createElement('video');
 		mixin.oncanplay = function() { doMix(); };
 		mixin.volume = 0;
 		mixin.src = mixin_audio_url;

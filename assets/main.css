@@ -77,13 +77,19 @@ body {
 }
 
 .login {
-	font-size: 200%;
 	text-align: center;
+}
+.login h1 {
+	font-size: 62px;
+}
+.login .instructions {
+	font-size: 22px;
 }
 .login table {
 	margin: 0 auto;
 }
-.login table th {
+.login table * {
+	font-size: 18px;
 	font-weight: normal;
 }
 .login input {

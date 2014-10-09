@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<meta name="viewport" content="width=640, user-scalable=no">
 		<link href="assets/main.css" type="text/css" rel="stylesheet">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"/></script>
@@ -23,14 +24,10 @@
 			var momentus;
 			var momentusReady = true;
 			$(function() {
-				var viewModes = [1,2,3];
-				var viewModeIndex = 0;
 				$('.controlPanel')
 					.on('click', '.camera', function(e) {
 						e.preventDefault();
-						viewModeIndex = ++viewModeIndex % viewModes.length;
-						console.log(viewModeIndex);
-						momentus.setViewMode(viewModes[viewModeIndex]);
+						momentus.cycleViewMode();
 					})
 					.on('click', '.shutdown', function(e) {
 						e.preventDefault();
@@ -76,7 +73,11 @@
 		<div class="content">
 			<form class="login">
 				<h1>momentus</h1>
-				<h4>Navigate with arrow keys.</h4>
+				<p class="instructions">
+					Navigate with arrow keys.<br>
+					Change camera with C.<br>
+					Skip song with F.
+				</p>
 				<table>
 					<tr>
 						<th>Last.fm</th>
