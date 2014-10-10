@@ -1,4 +1,4 @@
-var TrackQueue = function(fader, audioResolver)
+var TrackQueue = function(fader, audioResolver, nowPlayingElement)
 {
 	var _self = this;
 	var maxPlayDuration = 28;
@@ -32,6 +32,7 @@ var TrackQueue = function(fader, audioResolver)
 			if (audio === false) {
 				return false;
 			}
+			_self.updateNowPlaying(track);
 			_self.currentTrack = nextTrack;
 			var detectEndSong = function()
 			{
@@ -49,5 +50,22 @@ var TrackQueue = function(fader, audioResolver)
 	_self.setQueue = function(queue)
 	{
 		queuedTracks = queue;
+	}
+
+	var fadeInTimer;
+	_self.updateNowPlaying = function(track)
+	{
+		//console.log(track);
+		var artistStrings = [];
+		for (i in track.artists) {
+			artistStrings.push(track.artists[i].name);
+		}
+		clearTimeout(fadeInTimer);
+		nowPlayingElement.fadeOut(500, function() {
+			clearTimeout(fadeInTimer);
+			nowPlayingElement.find('.track').html(track.name);
+			nowPlayingElement.find('.artists').html(artistStrings.join(', '));
+			fadeInTimer = setTimeout(function() { nowPlayingElement.fadeIn(500); }, 1000);
+		});
 	}
 }

@@ -1,5 +1,5 @@
 * {
-	font-family: "Proxima Nova";
+	font-family: "Proxima Nova", "Helvetica Neue", "Helvetica", sans-serif;
 }
 
 body {
@@ -30,7 +30,7 @@ body {
 }
 
 .controlPanel {
-	background-color: rgba(0,0,0,.5);
+	/*background-color: rgba(0,0,0,.5);*/
 	height: 25px;
 	left: 0;
 	padding: 10px;
@@ -58,15 +58,25 @@ body {
 }
 
 .informationPanel {
-	bottom: 6%;
 	font-size: 1.6em;
-	left: 15%;
+	left: 10%;
 	position: absolute;
-	right: 15%;
+	right: 10%;
 	text-shadow: 0 0 20px #000;
-	top: 80%;
 }
 
+.nowShowing {
+	bottom: 6%;
+	top: 80%;
+}
+.nowPlaying {
+	top: 6%;
+	bottom: 6%;
+	text-align: right;
+}
+
+.informationPanel .track,
+.informationPanel .artists,
 .informationPanel .date,
 .informationPanel .details {
 	margin: 0;

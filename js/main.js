@@ -5,6 +5,12 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 	_self.LASTFM_TOKEN = '8d4baa503415f095169f6d44f3bd677c';
 
 
+	var hudElement = $('.hud');
+	var nowShowingElement = hudElement.find('.nowShowing');
+	var nowPlayingElement = hudElement.find('.nowPlaying');
+	var dateElement = nowShowingElement.find('.date');
+	var detailsElement = nowShowingElement.find('.details');
+
 	var time = 0;
 	var lastTime = 0;
 	var timeDiff = 0;
@@ -50,7 +56,7 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 	var audioMixer = new AudioFader('audio/static.mp3');
 	var songs = new SongStream(_self.LASTFM_TOKEN, lastFmUser);
 	var audioResolver = new AudioResolver();
-	var trackQueue = new TrackQueue(audioMixer, audioResolver);
+	var trackQueue = new TrackQueue(audioMixer, audioResolver, nowPlayingElement);
 
 	function addImages()
 	{
@@ -69,10 +75,6 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 	var InstaStream = new InstagramUserImagePool(_self.INSTAGRAM_TOKEN, instagramUser);
 	InstaStream.onReady = addImages;
 
-	var hudElement = $('.hud');
-	var informationElement = hudElement.find('.informationPanel');
-	var dateElement = informationElement.find('.date');
-	var detailsElement = informationElement.find('.details');
 	var detailsFadeInTimer;
 	var detailsFadeInDelay = 1;
 	var detailsFadeInSpeed = 1;
@@ -100,11 +102,11 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 		clearTimeout(detailsFadeInTimer);
 		if (dateElement.text() != dateString || detailsElement.text() != detailsString) {
 			setTimeout(function() {
-				informationElement.fadeOut(detailsFadeOutSpeed*1000, function() {
+				nowShowingElement.fadeOut(detailsFadeOutSpeed*1000, function() {
 					clearTimeout(detailsFadeInTimer);
 					dateElement.html(dateString);
 					detailsElement.html(detailsString);
-					detailsFadeInTimer = setTimeout(function() { informationElement.fadeIn(detailsFadeInSpeed*1000); }, Math.max(detailsFadeInDelay*1000, 500));
+					detailsFadeInTimer = setTimeout(function() { nowShowingElement.fadeIn(detailsFadeInSpeed*1000); }, Math.max(detailsFadeInDelay*1000, 500));
 				})
 			}, detailsFadeOutDelay*1000);
 		}
@@ -236,6 +238,8 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 
 		photographer.duration = 5;
 		photographer.goto(0, 0, 10000);
+		nowShowingElement.fadeOut();
+		nowPlayingElement.fadeOut();
 		hudElement.fadeOut();
 
 		for (i in imageTimeline.images) {
