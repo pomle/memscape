@@ -6,7 +6,7 @@ var SongStream = function(LASTFM_TOKEN, lastFmUser)
 	var seenSongs = {};
 
 	_self.tracks = {};
-	_self.periodHitLength = 5;
+	_self.periodHitLength = 10;
 
 	this.quantizeTime = function(date)
 	{
