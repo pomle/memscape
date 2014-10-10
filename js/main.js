@@ -298,6 +298,7 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 			camera.updateProjectionMatrix();
 		});
 
+	/*
 	var startX;
 	hudElement
 		.on('touchstart', function(e) {
@@ -311,5 +312,5 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 				skipImage(diffX < 0 ? 1 : -1);
 				startX = e.originalEvent.changedTouches[0].pageX;
 			}
-		});
+		});*/
 }
