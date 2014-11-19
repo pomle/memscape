@@ -1,0 +1,141 @@
+* {
+	font-family: "Proxima Nova", "Helvetica Neue", "Helvetica", sans-serif;
+}
+
+body {
+	color: #ffffff;
+	background: #000000;
+	font-size: 12px;
+	margin: 0;
+	overflow: hidden;
+}
+
+.viewport {
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: absolute;
+	top: 0;
+	z-index: 1;
+}
+
+.hud {
+	bottom: 0;
+	display: none;
+	left: 0;
+	right: 0;
+	position: absolute;
+	top: 0;
+	z-index: 2;
+}
+
+.controlPanel {
+	/*background-color: rgba(0,0,0,.5);*/
+	height: 25px;
+	left: 0;
+	padding: 10px;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.controlPanel .button {
+	background-repeat: no-repeat;
+	background-position: center;
+	display: block;
+	height: 25px;
+	width: 25px;
+}
+
+.controlPanel .camera {
+	background-image: url('images/camera.png');
+	float: left;
+}
+
+.controlPanel .shutdown {
+	background-image: url('images/power.png');
+	float: right;
+}
+
+.informationPanel {
+	font-size: 1.6em;
+	left: 10%;
+	position: absolute;
+	right: 10%;
+	text-shadow: 0 0 20px #000;
+}
+
+.nowShowing {
+	bottom: 6%;
+	top: 80%;
+}
+.nowPlaying {
+	top: 6%;
+	bottom: 6%;
+	text-align: right;
+}
+
+.informationPanel .track,
+.informationPanel .artists,
+.informationPanel .date,
+.informationPanel .details {
+	margin: 0;
+}
+
+.content {
+	margin-top: 100px;
+}
+
+.login {
+	text-align: center;
+}
+.login .provider {
+	border: none;
+	display: block;
+	height: 50px;
+	padding-top: 100px;
+	width: 250px;
+}
+.login .provider button {
+	background-color: rgba(255,255,255,.2);
+	background-size: 50%;
+	border-radius: 5px;
+	border: none;
+	color: #fff;
+	cursor: pointer;
+	display: block;
+	margin: 0 auto;
+	padding: .2em .5em;
+}
+.login .provider.spotify {
+	background:
+		url('images/vendor_logo_spotify.png') center 20px no-repeat,
+		linear-gradient(180deg, #84bd00, #648f00);
+	border-radius: 10px 0 0 10px;
+}
+.login .provider.instagram {
+	background:
+		url('images/vendor_logo_instagram.png') center 20px no-repeat,
+		linear-gradient(180deg, #5e89ab, #33628a);
+	border-radius: 0 10px 10px 0;
+}
+
+.login h1 {
+	font-size: 62px;
+}
+.login .instructions {
+	font-size: 22px;
+}
+.login table {
+	margin: 0 auto;
+}
+.login table * {
+	font-size: 18px;
+	font-weight: normal;
+}
+.login input {
+	color: #fff;
+	background-color: transparent;
+	border: 0;
+	border-bottom: solid 1px #fff;
+}

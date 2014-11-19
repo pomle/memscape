@@ -1,0 +1,95 @@
+<html>
+	<head>
+		<title>momentus</title>
+		<meta name="viewport" content="width=640, user-scalable=no">
+		<link href="assets/main.css" type="text/css" rel="stylesheet">
+		<script src="js/vendor/jquery.min.js"></script>
+		<script src="js/vendor/TweenMax.min.js"/></script>
+		<script src="js/vendor/three.min.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+
+		<script type="text/javascript" src="js/controller/AudioFader.js"></script>
+		<script type="text/javascript" src="js/controller/AudioResolver.js"></script>
+		<script type="text/javascript" src="js/controller/InstagramUserImagePool.js"></script>
+		<script type="text/javascript" src="js/controller/Photographer.js"></script>
+		<script type="text/javascript" src="js/controller/TrackQueue.js"></script>
+		<script type="text/javascript" src="js/entity/ImageEntity.js"></script>
+		<script type="text/javascript" src="js/model/ImageModel.js"></script>
+		<script type="text/javascript" src="js/model/TimelineModel.js"></script>
+		<script type="text/javascript" src="js/world/ImageStream.js"></script>
+		<script type="text/javascript" src="js/world/SpotifySongStream.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var momentus;
+			var momentusReady = true;
+			$(function() {
+				$('.controlPanel')
+					.on('click', '.camera', function(e) {
+						e.preventDefault();
+						momentus.cycleViewMode();
+					})
+					.on('click', '.shutdown', function(e) {
+						e.preventDefault();
+						if (momentus.shutDown) {
+							momentus.shutDown(function() {
+								$('.viewport').remove();
+								$('form').fadeIn();
+								momentus = null;
+								momentusReady = true;
+							});
+						}
+					});
+
+				$('form').submit(function(e) {
+					e.preventDefault();
+					if (!momentusReady) {
+						return;
+					}
+					momentusReady = false;
+					var spotifyUser = $(this).find('[name=spotifyUser]').val();
+					var instagramUser = $(this).find('[name=instagramUser]').val();
+					$(this).fadeOut(500, function() {
+						$('.hud').fadeIn();
+						momentus = new AutonomousMoments(spotifyUser, instagramUser);
+					});
+				});
+			});
+		</script>
+		<div class="hud">
+			<div class="controlPanel">
+				<a href="#" class="button camera"></a>
+				<a href="#" class="button shutdown"></a>
+			</div>
+			<div class="informationPanel nowPlaying">
+				<h3 class="track"></h3>
+				<h4 class="artists"></h4>
+			</div>
+			<div class="informationPanel nowShowing">
+				<h1 class="date"></h1>
+				<h3 class="details"></h3>
+			</div>
+		</div>
+		<div class="content">
+			<form class="login">
+				<h1>momentus</h1>
+				<p class="instructions">
+					Navigate with arrow keys.<br>
+					Change camera with C.<br>
+					Skip song with F.
+				</p>
+				<table>
+					<tr>
+						<th>Spotify</th>
+						<td><input name="spotifyUser" value="pomle"></td>
+					</tr>
+					<tr>
+						<th>Instagram</th>
+						<td><input name="instagramUser" value="pomle"></td>
+					</tr>
+				</table>
+				<button>Start</button>
+			</form>
+		</div>
+	</body>
+</html>

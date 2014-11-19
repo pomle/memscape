@@ -1,0 +1,23 @@
+CREATE TABLE env (
+    id integer PRIMARY KEY,
+    name varchar(256) NOT NULL,
+    value text,
+    UNIQUE (name)
+);
+
+CREATE TABLE users (
+    id integer PRIMARY KEY,
+    uuid varchar NOT NULL,
+    time_created timestamp,
+    UNIQUE (uuid)
+);
+
+CREATE TABLE user_tokens (
+	id integer PRIMARY KEY,
+	user_id integer NOT NULL,
+	time_created timestamp,
+	service varchar NOT NULL,
+	token text NOT NULL,
+	UNIQUE(token),
+	FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
