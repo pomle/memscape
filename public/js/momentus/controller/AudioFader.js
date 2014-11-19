@@ -20,8 +20,14 @@ var AudioFader = function(intermediate_audio_url)
 	_self.channels.intermediate.addEventListener('canplay', intermediateReady);
 	_self.channels.intermediate.src = intermediate_audio_url;
 
-	_self.fadeTo = function(mixin_audio_url)
+	var retryTimeout;
+	_self.fadeTo = function(mixin_audio_url, callback)
 	{
+		if (!mixin_audio_url) {
+			console.log('Invalid audio url', mixin_audio_url);
+			return false;
+		}
+
 		if (!readyToFade) {
 			console.log('Not ready to fade');
 			return false;
@@ -29,6 +35,13 @@ var AudioFader = function(intermediate_audio_url)
 		readyToFade = false;
 		var isMixinReady = false;
 		var currentChannel = _self.channels.current;
+
+		/* Assume failure and go back to ready state after some time. */
+		clearTimeout(retryTimeout);
+		retryTimeout = setTimeout(function() {
+			console.log('AudioFader force ready');
+			readyToFade = true;
+		}, minDelay + 4000);
 
 		var doMix = function()
 		{
@@ -39,6 +52,7 @@ var AudioFader = function(intermediate_audio_url)
 				TweenLite.to(mixin, 1, {
 					'volume': 1,
 					'onComplete': function() {
+						clearTimeout(retryTimeout);
 						readyToFade = true;
 					}
 				});
@@ -48,6 +62,9 @@ var AudioFader = function(intermediate_audio_url)
 						_self.channels.intermediate.pause();
 					}
 				});
+				if (callback) {
+					callback(mixin);
+				}
 			}
 			isMixinReady = true;
 		}
@@ -75,7 +92,7 @@ var AudioFader = function(intermediate_audio_url)
 			});
 		}
 
-		return mixin;
+		return true;
 	}
 
 	_self.pause = function()

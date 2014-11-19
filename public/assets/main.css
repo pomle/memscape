@@ -4,7 +4,7 @@
 
 body {
 	color: #ffffff;
-	background-color: #000000;
+	background: #000000;
 	font-size: 12px;
 	margin: 0;
 	overflow: hidden;
@@ -89,6 +89,37 @@ body {
 .login {
 	text-align: center;
 }
+.login .provider {
+	border: none;
+	display: block;
+	height: 50px;
+	padding-top: 100px;
+	width: 250px;
+}
+.login .provider button {
+	background-color: rgba(255,255,255,.2);
+	background-size: 50%;
+	border-radius: 5px;
+	border: none;
+	color: #fff;
+	cursor: pointer;
+	display: block;
+	margin: 0 auto;
+	padding: .2em .5em;
+}
+.login .provider.spotify {
+	background:
+		url('images/vendor_logo_spotify.png') center 20px no-repeat,
+		linear-gradient(180deg, #84bd00, #648f00);
+	border-radius: 10px 0 0 10px;
+}
+.login .provider.instagram {
+	background:
+		url('images/vendor_logo_instagram.png') center 20px no-repeat,
+		linear-gradient(180deg, #5e89ab, #33628a);
+	border-radius: 0 10px 10px 0;
+}
+
 .login h1 {
 	font-size: 62px;
 }

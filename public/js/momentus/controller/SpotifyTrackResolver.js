@@ -1,14 +1,16 @@
-var AudioResolver = function()
+var SpotifyTrackResolver = function()
 {
 	var _self = this;
-	_self.audioUrls = {};
+	_self.trackCache = {};
 
-	this.getAudioUrl = function(trackQuery, callback)
+	this.getTrack = function(trackQuery, callback)
 	{
-		if (_self.audioUrls[trackQuery]) {
-			callback(_self.audioUrls[trackQuery]);
+		if (_self.trackCache[trackQuery]) {
+			callback(_self.trackCache[trackQuery]);
 			return;
 		}
+
+		console.log('Resolving track name', trackQuery);
 
 		var xhr = $.ajax({
 			'url': 'https://api.spotify.com/v1/search',
@@ -28,8 +30,8 @@ var AudioResolver = function()
 			} else {
 				track = false;
 			}
-			_self.audioUrls[trackQuery] = track;
-			callback(_self.audioUrls[trackQuery]);
+			_self.trackCache[trackQuery] = track;
+			callback(_self.trackCache[trackQuery]);
 		});
 	}
 }

@@ -1,9 +1,6 @@
-var AutonomousMoments = function(lastFmUser, instagramUser)
+var Momentus = function(songStream, imageStream)
 {
 	var _self = this;
-	_self.INSTAGRAM_TOKEN = '9e0d8a7b13ee43b289b72b8a67db7f25';
-	_self.LASTFM_TOKEN = '8d4baa503415f095169f6d44f3bd677c';
-
 
 	var hudElement = $('.hud');
 	var nowShowingElement = hudElement.find('.nowShowing');
@@ -36,9 +33,7 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 	var ambientLight = new THREE.AmbientLight(0xffffff);
 	scene.add(ambientLight);
 
-	var timeline = new TimelineModel(scene);
-
-	var photographer = new Photographer(camera, timeline.model);
+	var photographer = new Photographer(camera);
 
 
 	function animate() {
@@ -50,11 +45,11 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 	}
 	animate();
 
-	var imageTimeline = new ImageStream(new THREE.Vector3(0,0,-200), scene);
+	var imageTimeline = requirejs('model/imageWall');new ImageStream(new THREE.Vector3(0,0,-200), scene);
 	_self.imageTimeline = imageTimeline;
 	var imageIndex = -1;
 	var audioMixer = new AudioFader('audio/static.mp3');
-	var songs = new SongStream(_self.LASTFM_TOKEN, lastFmUser);
+	var songs = new SpotifySongStream(lastFmUser);
 	var audioResolver = new AudioResolver();
 	var trackQueue = new TrackQueue(audioMixer, audioResolver, nowPlayingElement);
 
@@ -89,8 +84,6 @@ var AutonomousMoments = function(lastFmUser, instagramUser)
 		var imageEntity = imageTimeline.images[imageIndex];
 		var pos = imageEntity.ImageModel.model.position;
 		console.log('Focusing on', imageIndex, imageEntity, pos);
-
-		timeline.addDate(imageEntity.date);
 
 		var dateString = imageEntity.date.toLocaleDateString();
 		var detailsString = '';

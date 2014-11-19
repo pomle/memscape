@@ -3,10 +3,9 @@
 		<title>momentus</title>
 		<meta name="viewport" content="width=640, user-scalable=no">
 		<link href="assets/main.css" type="text/css" rel="stylesheet">
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"/></script>
-		<script src="http://threejs.org/build/three.min.js"></script>
-		<script type="text/javascript" src="http://mrdoob.github.io/three.js/examples/fonts/helvetiker_bold.typeface.js"></script>
+		<script src="js/vendor/jquery.min.js"></script>
+		<script src="js/vendor/TweenMax.min.js"/></script>
+		<script src="js/vendor/three.min.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 
 		<script type="text/javascript" src="js/controller/AudioFader.js"></script>
@@ -18,7 +17,7 @@
 		<script type="text/javascript" src="js/model/ImageModel.js"></script>
 		<script type="text/javascript" src="js/model/TimelineModel.js"></script>
 		<script type="text/javascript" src="js/world/ImageStream.js"></script>
-		<script type="text/javascript" src="js/world/SongStream.js"></script>
+		<script type="text/javascript" src="js/world/SpotifySongStream.js"></script>
 	</head>
 	<body>
 		<script type="text/javascript">
@@ -48,11 +47,11 @@
 						return;
 					}
 					momentusReady = false;
-					var lastFmUser = $(this).find('[name=lastFmUser]').val();
+					var spotifyUser = $(this).find('[name=spotifyUser]').val();
 					var instagramUser = $(this).find('[name=instagramUser]').val();
 					$(this).fadeOut(500, function() {
 						$('.hud').fadeIn();
-						momentus = new AutonomousMoments(lastFmUser, instagramUser);
+						momentus = new AutonomousMoments(spotifyUser, instagramUser);
 					});
 				});
 			});
@@ -81,8 +80,8 @@
 				</p>
 				<table>
 					<tr>
-						<th>Last.fm</th>
-						<td><input name="lastFmUser" value="pomle"></td>
+						<th>Spotify</th>
+						<td><input name="spotifyUser" value="pomle"></td>
 					</tr>
 					<tr>
 						<th>Instagram</th>
